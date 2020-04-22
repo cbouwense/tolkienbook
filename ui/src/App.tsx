@@ -5,6 +5,7 @@ import { Switch } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import { Allies } from "./allies/components/Allies";
 import { Navbar } from "./navbar/components/Navbar";
 import { Profile } from "./profile/components/Profile";
 
@@ -23,6 +24,7 @@ export const App = () => {
       <div className={classes.root}>
         <Switch>
           <Route path="/" exact component={Profile} />
+          <Route path="/allies" exact component={Allies} />
         </Switch>
       </div>
     </Router>
