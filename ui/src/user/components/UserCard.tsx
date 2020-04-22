@@ -6,7 +6,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 
-export interface AllyCardProps {
+export interface UserCardProps {
   avatarSrc: string;
   name: string;
 }
@@ -16,28 +16,31 @@ const useStyles = makeStyles(() => ({
     "width": "100px",
     "height": "100px"
   },
-  allyCard: {
+  card: {
     "box-shadow": "10px 10px 20px #c9c9c9",
     "padding": "15px",
   },
-  allyHeader: {
+  header: {
     "display": "flex",
     "align-items": "center"
   },
   link: {
     "textDecoration": "none"
+  },
+  name: {
+    "margin-left": "15px"
   }
 }));
 
-export const AllyCard = (props: AllyCardProps) => {
+export const UserCard = (props: UserCardProps) => {
   const classes = useStyles();
   
   return (
-    <Link to="user/elrond" className={classes.link}>
-      <Card className={classes.allyCard}>
-        <div className={classes.allyHeader}>
+    <Link to={`user/${props.name}`} className={classes.link}>
+      <Card className={classes.card}>
+        <div className={classes.header}>
           <Avatar className={classes.avatar} src={props.avatarSrc} />
-          <Typography variant="h3">{props.name}</Typography>
+          <Typography className={classes.name} variant="h3">{props.name}</Typography>
         </div>
       </Card>
     </Link>
