@@ -1,4 +1,7 @@
 import React from 'react';
+import { BrowserRouter as Router } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -15,12 +18,14 @@ export const App = () => {
   const classes = useStyles();
 
   return (
-    <div>
+    <Router>
       <Navbar />
       <div className={classes.root}>
-        <Profile />
+        <Switch>
+          <Route path="/" exact component={Profile} />
+        </Switch>
       </div>
-    </div>
+    </Router>
   );
 }
 
