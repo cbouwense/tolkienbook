@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 
 export interface ProfileDetailsProps {
   name: string;
-  age: number;
   // TODO: make a race type
   race: string;
   birthyear: string;
@@ -27,11 +26,6 @@ export const ProfileDetails = (props: ProfileDetailsProps) => {
       <Grid item xs={12}>
         <Typography variant="h2">
           {props.name}
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant="h4">
-          Age: {props.age}
         </Typography>
       </Grid>
       <Grid item xs={12}>

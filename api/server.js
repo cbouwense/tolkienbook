@@ -18,6 +18,11 @@ db.once("open", () => console.log("Connected to db"));
 
 app.use(express.json());
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 app.use("/user", userRouter);
 
 app.listen(3001, () => {

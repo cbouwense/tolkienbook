@@ -20,7 +20,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const ProfileCard = () => {
+export interface ProfileCardProps {
+  name: string;
+  race: string;
+  birthyear: string;
+}
+
+export const ProfileCard = (props: ProfileCardProps) => {
   const classes = useStyles();
 
   return (
@@ -31,10 +37,9 @@ export const ProfileCard = () => {
       />
       <CardContent>
         <ProfileDetails 
-          name="Gil Galad"
-          age={3581}
-          race="Elf"
-          birthyear="FA 450"
+          name={props.name}
+          race={props.race}
+          birthyear={props.birthyear}
         />
       </CardContent>
     </Card>

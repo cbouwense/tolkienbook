@@ -6,11 +6,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 
-export interface UserCardProps {
-  avatarSrc: string;
-  name: string;
-}
-
 const useStyles = makeStyles(() => ({
   avatar: {
     "width": "100px",
@@ -31,6 +26,11 @@ const useStyles = makeStyles(() => ({
     "margin-left": "15px"
   }
 }));
+
+export interface UserCardProps {
+  avatarSrc: string;
+  name: string;
+}
 
 export const UserCard = (props: UserCardProps) => {
   const classes = useStyles();

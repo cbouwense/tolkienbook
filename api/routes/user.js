@@ -38,6 +38,26 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/:id/add_ally", getUser, async (req, res) => {
+  try {
+    res.user.allies.push(req.body.ally) 
+    const updatedUser = await res.user.save();
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+router.post("/:id/add_enemy", getUser, async (req, res) => {
+  try {
+    res.user.enemies.push(req.body.enemy) 
+    const updatedUser = await res.user.save();
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 router.patch("/:id", getUser, async (req, res) => {
   if (req.body.name != null) {
     res.user.name = req.body.name;
