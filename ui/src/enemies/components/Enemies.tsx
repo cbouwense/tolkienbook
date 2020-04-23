@@ -1,9 +1,15 @@
+import axios from "axios";
 import React from "react";
+import { connect } from "react-redux";
+import { useEffect } from "react";
+import { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
+import { State } from "../../store";
+import { User } from "../../user/model";
 import { UserCard } from "../../user/components/UserCard";
 
 const useStyles = makeStyles(() => ({
@@ -14,26 +20,58 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export const Enemies = () => {
+export interface EnemiesProps {
+  enemyIds: string[];
+}
+
+const ConnectedEnemies = (props: EnemiesProps) => {
   const classes = useStyles();
-  
+  const [enemies, setEnemies] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchEnemies = async () => {
+      let fetchedEnemies = [] as User[];
+      let loopRes = new Promise((resolve, reject) => {
+        props.enemyIds.forEach(async (id, index, array) => {
+          try {
+            const res = await axios.get(`http://localhost:3001/user/${id}`)
+            fetchedEnemies.push(res.data as User);
+          } catch (err) {
+            console.error("error fetching enemy: ", err);
+          }
+          if (index === array.length-1) 
+            resolve();
+        });
+      });
+
+      loopRes.then(() => {
+        setEnemies(fetchedEnemies);
+      });
+    }
+    fetchEnemies();
+  }, [props.enemyIds]);
+
   return (
     <div className={classes.root}>
-      <Typography variant="h1">Enemies</Typography>
+      <Typography variant="h1">Allies</Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={4}>
-          <UserCard 
-            avatarSrc="https://i2.wp.com/www.tor.com/wp-content/uploads/2018/09/Morgoth.jpg?fit=400%2C+9999&crop=0%2C0%2C100%2C282px&ssl=1"
-            name="Morgoth"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <UserCard
-            avatarSrc="https://vignette.wikia.nocookie.net/lotr/images/9/90/Sauron-2.jpg/revision/latest/top-crop/width/360/height/450?cb=20110508182634"
-            name="Sauron"
-          />
-        </Grid>
+        {enemies.map((enemy: User) => {
+          return (
+            <Grid item xs={12} sm={6} md={4} key={enemy.name}>
+              <UserCard 
+                avatarSrc={enemy.image}
+                name={enemy.name}
+              />
+            </Grid>
+          );
+        })}
       </Grid>
     </div>
   )
 }
+
+const mapStateToProps = (state: State) => ({
+  enemyIds: state.user.enemies
+})
+
+export const Enemies = connect(mapStateToProps)(ConnectedEnemies);

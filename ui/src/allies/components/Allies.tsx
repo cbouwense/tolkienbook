@@ -35,9 +35,7 @@ const ConnectedAllies = (props: AlliesProps) => {
         props.allyIds.forEach(async (id, index, array) => {
           try {
             const res = await axios.get(`http://localhost:3001/user/${id}`)
-            console.log("pushing")
             fetchedAllies.push(res.data as User);
-            console.log("finished pushing");
           } catch (err) {
             console.error("error fetching ally: ", err);
           }
@@ -47,22 +45,17 @@ const ConnectedAllies = (props: AlliesProps) => {
       });
 
       loopRes.then(() => {
-        console.log("fetchedAllies: ", fetchedAllies);
-        console.log("fetchedAllies length: ", fetchedAllies.length);
         setAllies(fetchedAllies);
       });
     }
     fetchAllies();
   }, [props.allyIds]);
 
-  console.log("allies: ", allies)
-
   return (
     <div className={classes.root}>
-      <Typography variant="h1">Allies</Typography>
+      <Typography variant="h1">Enemies</Typography>
       <Grid container spacing={3}>
         {allies.map((ally: User) => {
-          console.log("ally: ", ally)
           return (
             <Grid item xs={12} sm={6} md={4} key={ally.name}>
               <UserCard 
