@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
 
 export const Enemies = () => {
   const classes = useStyles();
-  console.log("in enemeis render")
+  
   return (
     <div className={classes.root}>
       <Typography variant="h1">Enemies</Typography>
