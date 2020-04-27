@@ -1,7 +1,13 @@
 import { ADDING_ALLY } from "./constant";
 import { ALLY_ADDED } from "./constant";
+import { UserState } from "../store";
 
-export const userReducer = (state = {}, action: any) => {
+const defaultState: UserState = {
+  addingAlly: false,
+  user: undefined
+} 
+
+export const userReducer = (state: UserState = defaultState, action: any) => {
   switch (action.type) {
     case ADDING_ALLY:
       return {

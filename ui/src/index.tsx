@@ -4,25 +4,28 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from "react-redux";
 
-import { State } from "./store";
+import { UserState } from "./store";
 import Store from "./store";
 
 // TODO this is just temporary
-const initialState: State = {
-  user: {
-    name: "Gil Galad",
-    race: "Elf",
-    birthyear: "FA 450",
-    image: "https://i.ytimg.com/vi/qWBecwqNGkM/maxresdefault.jpg",
-    allies: [
-      "5ea0a62980c7ad99687bda9c"
-    ],
-    enemies: [
-      "5ea0aebee7e637d889068372"
-    ]
-  }
-}
-const store = Store(initialState);
+//const initialState: State = {
+//  user: {
+//    name: "Gil Galad",
+//    race: "Elf",
+//    birthyear: "FA 450",
+//    image: "https://i.ytimg.com/vi/qWBecwqNGkM/maxresdefault.jpg",
+//    allies: [
+//      "5ea0a62980c7ad99687bda9c"
+//    ],
+//    enemies: [
+//      "5ea0aebee7e637d889068372"
+//    ]
+//  }
+//}
+
+const store = Store();
+
+console.log("getState: ", store.getState())
 
 ReactDOM.render(
   <React.StrictMode>

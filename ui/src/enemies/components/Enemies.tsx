@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import { State } from "../../store";
+import { AppState } from "../../store";
 import { User } from "../../user/model";
 import { UserCard } from "../../user/components/UserCard";
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface EnemiesProps {
-  enemyIds: string[];
+  enemyIds?: string[];
 }
 
 const ConnectedEnemies = (props: EnemiesProps) => {
@@ -32,16 +32,18 @@ const ConnectedEnemies = (props: EnemiesProps) => {
     const fetchEnemies = async () => {
       let fetchedEnemies = [] as User[];
       let loopRes = new Promise((resolve, reject) => {
-        props.enemyIds.forEach(async (id, index, array) => {
-          try {
-            const res = await axios.get(`http://localhost:3001/user/${id}`)
-            fetchedEnemies.push(res.data as User);
-          } catch (err) {
-            console.error("error fetching enemy: ", err);
-          }
-          if (index === array.length-1) 
-            resolve();
-        });
+        if (!!props.enemyIds) {
+          props.enemyIds.forEach(async (id, index, array) => {
+            try {
+              const res = await axios.get(`http://localhost:3001/user/${id}`)
+              fetchedEnemies.push(res.data as User);
+            } catch (err) {
+              console.error("error fetching enemy: ", err);
+            }
+            if (index === array.length-1) 
+              resolve();
+          });
+        }
       });
 
       loopRes.then(() => {
@@ -70,8 +72,8 @@ const ConnectedEnemies = (props: EnemiesProps) => {
   )
 }
 
-const mapStateToProps = (state: State) => ({
-  enemyIds: state.user.enemies
+const mapStateToProps = (state: AppState) => ({
+  enemyIds: state.user.user?.enemies
 })
 
 export const Enemies = connect(mapStateToProps)(ConnectedEnemies);

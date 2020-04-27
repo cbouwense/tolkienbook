@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import { State } from "../../store";
+import { AppState } from "../../store";
 import { User } from "../../user/model";
 import { UserCard } from "../../user/components/UserCard";
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface AlliesProps { 
-  allyIds: string[];
+  allyIds?: string[];
 }
 
 const ConnectedAllies = (props: AlliesProps) => {
@@ -32,16 +32,18 @@ const ConnectedAllies = (props: AlliesProps) => {
     const fetchAllies = async () => {
       let fetchedAllies = [] as User[];
       let loopRes = new Promise((resolve, reject) => {
-        props.allyIds.forEach(async (id, index, array) => {
-          try {
-            const res = await axios.get(`http://localhost:3001/user/${id}`)
-            fetchedAllies.push(res.data as User);
-          } catch (err) {
-            console.error("error fetching ally: ", err);
-          }
-          if (index === array.length-1) 
-            resolve();
-        });
+        if (!!props.allyIds) {
+          props.allyIds.forEach(async (id, index, array) => {
+            try {
+              const res = await axios.get(`http://localhost:3001/user/${id}`)
+              fetchedAllies.push(res.data as User);
+            } catch (err) {
+              console.error("error fetching ally: ", err);
+            }
+            if (index === array.length-1) 
+              resolve();
+          });
+        }
       });
 
       loopRes.then(() => {
@@ -70,8 +72,8 @@ const ConnectedAllies = (props: AlliesProps) => {
   )
 }
 
-const mapStateToProps = (state: State) => ({
-  allyIds: state.user.allies
+const mapStateToProps = (state: AppState) => ({
+  allyIds: state.user.user?.allies
 })
 
 export const Allies = connect(mapStateToProps)(ConnectedAllies);

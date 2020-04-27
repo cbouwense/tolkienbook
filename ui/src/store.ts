@@ -3,9 +3,13 @@ import { rootReducer } from "./reducers";
 
 import { User } from "./user/model";
 
-export interface State {
-  user: User;
+export interface UserState {
+  addingAlly: boolean;
+  user?: User;
 }
 
-export default (initialState: State) => 
-  createStore(rootReducer, initialState);
+export interface AppState {
+  user: UserState;
+}
+
+export default () => createStore(rootReducer);

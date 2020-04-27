@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import { AppState } from "../../store";
 import { Posts } from "./Posts";
 import { ProfileCard } from "./ProfileCard";
-import { State } from "../../store";
 import { User } from "../../user/model";
 
 const useStyles = makeStyles(() => ({
@@ -16,27 +16,29 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface ProfileProps {
-  user: User;
+  user?: User;
 }
 
 // TODO: Fix the right margin for the posts
 export const ConnectedProfile = (props: ProfileProps) => {
   const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
-      <ProfileCard 
-        name={props.user.name}
-        race={props.user.race}
-        birthyear={props.user.birthyear}
-      />
-      <Posts />
-    </div>
+  return ( 
+    props.user !== undefined ? (
+      <div className={classes.root}>
+        <ProfileCard 
+          name={props.user.name}
+          race={props.user.race}
+          birthyear={props.user.birthyear}
+        />
+        <Posts />
+      </div>
+    ) : null
   );
 }
 
-const mapStateToProps = (state: State) => ({
-  user: state.user
+const mapStateToProps = (state: AppState) => ({
+  user: state.user.user
 });
 
 export const Profile = connect(mapStateToProps)(ConnectedProfile);
