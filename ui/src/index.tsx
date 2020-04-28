@@ -4,7 +4,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from "react-redux";
 
-import { UserState } from "./store";
+//import { UserState } from "./store";
 import Store from "./store";
 
 // TODO this is just temporary
