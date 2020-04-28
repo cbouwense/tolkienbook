@@ -1,4 +1,5 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const userRouter = require("./routes/user");
@@ -18,10 +19,7 @@ db.once("open", () => console.log("Connected to db"));
 
 app.use(express.json());
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
+app.use(cors());
 
 app.use("/user", userRouter);
 

@@ -33,6 +33,7 @@ const ConnectedAllies = (props: AlliesProps) => {
       let fetchedAllies = [] as User[];
       let loopRes = new Promise((resolve, reject) => {
         if (!!props.allyIds) {
+          console.log("allyIds: ", props.allyIds)
           props.allyIds.forEach(async (id, index, array) => {
             try {
               const res = await axios.get(`http://localhost:3001/user/${id}`)
@@ -55,7 +56,7 @@ const ConnectedAllies = (props: AlliesProps) => {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h1">Enemies</Typography>
+      <Typography variant="h1">Allies</Typography>
       <Grid container spacing={3}>
         {allies.map((ally: User) => {
           return (

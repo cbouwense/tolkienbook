@@ -1,5 +1,9 @@
+import axios from "axios";
 import React from "react";
+import { bindActionCreators, Dispatch } from "redux";
+import { connect } from "react-redux";
 import { useState } from "react";
+import * as UserActions from "../user/actions";
 
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -34,11 +38,12 @@ interface State {
 }
 
 export interface LoginModalProps { 
+  action: any;
   handleClose: () => void;
   open: boolean;
 }
 
-export const LoginModal = (props: LoginModalProps) => {
+const ConnectedLoginModal = (props: LoginModalProps) => {
   const classes = useStyles();
   const [values, setValues] = useState({
     username: "",
@@ -47,6 +52,15 @@ export const LoginModal = (props: LoginModalProps) => {
 
   const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
+  }
+
+  const handleSubmit = async () => {
+    console.log("Sending login");
+    const res = await axios.post("http://localhost:3001/user/login", { 
+      username: values.username, 
+      password: values.password 
+    })
+    props.action.login(res.data);
   }
 
   const body = (
@@ -69,7 +83,11 @@ export const LoginModal = (props: LoginModalProps) => {
             value={values.password} 
             onChange={handleChange("password")}
           />
-          <Button variant="contained" color="primary">
+          <Button 
+            variant="contained" 
+            color="primary"
+            onClick={handleSubmit}
+          >
             Submit
           </Button>
         </div>
@@ -86,3 +104,9 @@ export const LoginModal = (props: LoginModalProps) => {
     </Modal>
   );
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  action: bindActionCreators(UserActions, dispatch)
+});
+
+export const LoginModal = connect(null, mapDispatchToProps)(ConnectedLoginModal);

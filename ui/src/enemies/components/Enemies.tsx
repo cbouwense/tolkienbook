@@ -55,7 +55,7 @@ const ConnectedEnemies = (props: EnemiesProps) => {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h1">Allies</Typography>
+      <Typography variant="h1">Enemies</Typography>
       <Grid container spacing={3}>
         {enemies.map((enemy: User) => {
           return (

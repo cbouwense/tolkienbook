@@ -1,5 +1,4 @@
-import { ADDING_ALLY } from "./constant";
-import { ALLY_ADDED } from "./constant";
+import { LOGIN } from "./constant";
 import { UserState } from "../store";
 
 const defaultState: UserState = {
@@ -9,15 +8,10 @@ const defaultState: UserState = {
 
 export const userReducer = (state: UserState = defaultState, action: any) => {
   switch (action.type) {
-    case ADDING_ALLY:
+    case LOGIN:
       return {
         ...state,
-        addingAlly: true
-      }
-    case ALLY_ADDED:
-      return {
-        ...state,
-        addingAlly: false
+        user: action.user
       }
     default:
       return state

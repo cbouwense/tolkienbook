@@ -48,14 +48,7 @@ export const Navbar = () => {
               </Button>
             </Link>
           </Grid>
-          <Grid item xs={false} md={5}></Grid>
-          <Grid item xs={12} sm={6} md={1}>
-            <Button color="inherit">
-              <Typography variant="h6">
-                Login
-              </Typography>
-            </Button>
-          </Grid>
+          <Grid item xs={false} md={6}></Grid>
         </Grid>
       </Toolbar>
     </AppBar>
