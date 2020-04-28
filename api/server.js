@@ -2,6 +2,7 @@ require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
+const loginRouter = require("./routes/login");
 const userRouter = require("./routes/user");
 
 const app = express()
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use(cors());
 
+app.use("/login", loginRouter);
 app.use("/user", userRouter);
 
 app.listen(3001, () => {

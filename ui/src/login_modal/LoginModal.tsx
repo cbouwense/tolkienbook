@@ -56,7 +56,7 @@ const ConnectedLoginModal = (props: LoginModalProps) => {
 
   const handleSubmit = async () => {
     console.log("Sending login");
-    const res = await axios.post("http://localhost:3001/user/login", { 
+    const res = await axios.post("http://localhost:3001/login", { 
       username: values.username, 
       password: values.password 
     })
