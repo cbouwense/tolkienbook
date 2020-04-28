@@ -1,4 +1,7 @@
+import axios from "axios";
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -23,15 +26,22 @@ export interface ProfileProps {
 export const ConnectedProfile = (props: ProfileProps) => {
   const classes = useStyles();
 
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    console.log("axios get")
+  });
+
   return ( 
     props.user !== undefined ? (
       <div className={classes.root}>
         <ProfileCard 
           name={props.user.name}
           race={props.user.race}
+          image={props.user.image}
           birthyear={props.user.birthyear}
         />
-        <Posts />
+        <Posts posts={posts}/>
       </div>
     ) : null
   );

@@ -23,6 +23,7 @@ const useStyles = makeStyles(() => ({
 export interface ProfileCardProps {
   name: string;
   race: string;
+  image: string;
   birthyear: string;
 }
 
@@ -33,7 +34,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
     <Card className={classes.details}>
       <CardMedia 
         className={classes.profilePic}
-        image="https://66.media.tumblr.com/9c0f217919b12c3b378ba878a4e370b1/tumblr_o7sgjyR0fP1s7x9qwo2_500.jpg" 
+        image={props.image} 
       />
       <CardContent>
         <ProfileDetails 

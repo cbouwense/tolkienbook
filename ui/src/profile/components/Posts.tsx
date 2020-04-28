@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
 import { Post } from "./Post";
+import { Post as PostType } from "../model";
 
 const useStyles = makeStyles(() => ({
   posts: {
@@ -13,6 +14,10 @@ const useStyles = makeStyles(() => ({
     "padding": "0"
   }
 }));
+
+export interface PostsProps {
+  posts: PostType[];
+}
 
 // TODO fix the right margin thing where it isn't obeying the padding
 export const Posts = () => {

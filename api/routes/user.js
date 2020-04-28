@@ -30,7 +30,8 @@ router.post("/", async (req, res) => {
     name: req.body.name,
     race: req.body.race,
     birthyear: req.body.birthyear,
-    image: req.body.image
+    image: req.body.image,
+    password: req.body.password
   });
   try {
     const newUser = await user.save();

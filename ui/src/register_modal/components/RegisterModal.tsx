@@ -3,7 +3,7 @@ import React from "react";
 import { bindActionCreators, Dispatch } from "redux";
 import { connect } from "react-redux";
 import { useState } from "react";
-import * as UserActions from "../user/actions";
+import * as UserActions from "../../user/actions";
 
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -34,19 +34,27 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface State { 
   username: string;
+  name: string;
+  race: string;
+  birthyear: string;
+  image: string;
   password: string;
 }
 
-export interface LoginModalProps { 
+export interface RegisterModalProps { 
   action: any;
   handleClose: () => void;
   open: boolean;
 }
 
-const ConnectedLoginModal = (props: LoginModalProps) => {
+const ConnectedRegisterModal = (props: RegisterModalProps) => {
   const classes = useStyles();
   const [values, setValues] = useState({
     username: "",
+    name: "",
+    race: "",
+    birthyear: "",
+    image: "",
     password: ""
   })
 
@@ -55,18 +63,49 @@ const ConnectedLoginModal = (props: LoginModalProps) => {
   }
 
   const handleSubmit = async () => {
-    console.log("Sending login");
-    const res = await axios.post("http://localhost:3001/login", { 
-      username: values.username, 
-      password: values.password 
+    const res = await axios.post("http://localhost:3001/user/", { 
+      username: values.username,
+      name: values.name,
+      race: values.race,
+      birthyear: values.birthyear,
+      image: values.image,
+      password: values.password
     })
-    props.action.login(res.data);
+    props.action.register(res.data);
   }
 
   const body = (
     <div className={classes.root}>
-      <Typography variant="h2">Login</Typography>
+      <Typography variant="h2">Register</Typography>
       <form>
+        <TextField 
+          className={classes.input}
+          id="standard-basic" 
+          label="Name" 
+          value={values.name} 
+          onChange={handleChange("name")}
+        />
+        <TextField 
+          className={classes.input}
+          id="standard-basic" 
+          label="Race" 
+          value={values.race} 
+          onChange={handleChange("race")}
+        />
+        <TextField 
+          className={classes.input}
+          id="standard-basic" 
+          label="Birthyear" 
+          value={values.birthyear} 
+          onChange={handleChange("birthyear")}
+        />
+        <TextField 
+          className={classes.input}
+          id="standard-basic" 
+          label="Image" 
+          value={values.image} 
+          onChange={handleChange("image")}
+        />
         <TextField 
           className={classes.input}
           id="standard-basic" 
@@ -109,4 +148,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   action: bindActionCreators(UserActions, dispatch)
 });
 
-export const LoginModal = connect(null, mapDispatchToProps)(ConnectedLoginModal);
+export const RegisterModal = connect(null, mapDispatchToProps)(ConnectedRegisterModal);
