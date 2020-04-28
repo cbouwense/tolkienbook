@@ -1,9 +1,11 @@
+const crypto = require("crypto");
 const express = require("express");
+
 const User = require("../models/user");
 
 const router = express.Router();
 
-const getUser = async (req, res, next) => {
+const getUserById = async (req, res, next) => {
   let user;
   try {
     user = await User.findById(req.params.id);
@@ -19,12 +21,13 @@ const getUser = async (req, res, next) => {
   next();
 }
 
-router.get("/:id", getUser, async (req, res) => {
+router.get("/:id", getUserById, async (req, res) => {
   res.send(res.user);
 });
 
 router.post("/", async (req, res) => {
   const user = new User({
+    username: req.body.username,
     name: req.body.name,
     race: req.body.race,
     birthyear: req.body.birthyear,
@@ -38,7 +41,26 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/:id/add_ally", getUser, async (req, res) => {
+router.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
+    const hashedPassword = crypto.createHash("sha256").update(req.body.password).digest("hex");
+
+    if (hashedPassword === user.password) {
+      res.status(200).json(user)
+    } else {
+      res.status(404).json({
+        message: "Username or password incorrect"
+      })
+    }
+  } catch (err) {
+    res.status(404).json({ 
+      message: err.message 
+    });
+  }
+});
+
+router.post("/:id/add_ally", getUserById, async (req, res) => {
   try {
     res.user.allies.push(req.body.ally) 
     const updatedUser = await res.user.save();
@@ -48,7 +70,7 @@ router.post("/:id/add_ally", getUser, async (req, res) => {
   }
 });
 
-router.post("/:id/add_enemy", getUser, async (req, res) => {
+router.post("/:id/add_enemy", getUserById, async (req, res) => {
   try {
     res.user.enemies.push(req.body.enemy) 
     const updatedUser = await res.user.save();
@@ -58,7 +80,7 @@ router.post("/:id/add_enemy", getUser, async (req, res) => {
   }
 });
 
-router.patch("/:id", getUser, async (req, res) => {
+router.patch("/:id", getUserById, async (req, res) => {
   if (req.body.name != null) {
     res.user.name = req.body.name;
   }
@@ -79,7 +101,7 @@ router.patch("/:id", getUser, async (req, res) => {
   }
 });
 
-router.delete("/:id", getUser, async (req, res) => {
+router.delete("/:id", getUserById, async (req, res) => {
   try {
     await res.user.remove();
     res.json({ message: "Successfully removed user"});
