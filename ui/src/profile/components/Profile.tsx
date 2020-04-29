@@ -29,7 +29,17 @@ export const ConnectedProfile = (props: ProfileProps) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    console.log("axios get")
+    const fetchPosts = async () => {
+      if (props.user) {
+        try {
+          const posts = await axios.get(`http://localhost:3001/post/user/${props.user._id}`);
+          setPosts(posts.data);
+        } catch (err) {
+          console.error(`Error fetching posts for user ${props.user._id}: `, err);
+        }
+      }
+    }
+    fetchPosts();
   });
 
   return ( 

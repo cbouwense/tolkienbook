@@ -25,7 +25,7 @@ app.use(cors());
 
 app.use("/login", loginRouter);
 app.use("/post", postRouter);
-app.use("/user", userRouter);
+app.use("/user", userRouter.router);
 
 app.listen(3001, () => {
   console.log("Server started");

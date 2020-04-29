@@ -91,4 +91,5 @@ router.delete("/:id", getUserById, async (req, res) => {
   }
 });
 
-module.exports = router;
+exports.router = router;
+exports.getUserById = getUserById;

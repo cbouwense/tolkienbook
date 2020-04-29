@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const Post = require("../models/post");
+const User = require("../models/user");
 
 const router = express.Router();
 const ObjectId = mongoose.Types.ObjectId;
@@ -22,21 +23,47 @@ const getPostById = async (req, res, next) => {
   next();
 }
 
+const getUserById = async (id) => {
+  let user;
+  try {
+    user = await User.findById(id);
+  } catch (err) {
+    console.log(`Error fetching user ${id}: `, err);
+  }
+  return user;
+}
+
 router.get("/:id", getPostById, async (req, res) => {
-  res.send(res.post);
+  const user = await getUserById(res.post.userId);
+  res.json({
+    name: user.name,
+    image: user.image,
+    createdAt: res.post.createdAt,
+    text: res.post.text
+  });
 });
 
 router.get("/user/:id", async (req, res) => {
   let posts;
   try {
     posts = await Post.find({ userId: new ObjectId(req.params.id) })
-    console.log("posts: ", posts);
     if (posts == null) {
       return res.status(404).json({ 
         message: `Cannot find posts by user ${req.params.id}`
       });
     }
-    res.status(200).json(posts);
+    // for each post, lookup user info and augment
+    const augmentedPosts = await Promise.all(posts.map(async (post) => {
+      const user = await getUserById(post.userId);
+      return {
+        name: user.name,
+        image: user.image,
+        createdAt: post.createdAt,
+        text: post.text
+      }
+    }));
+    console.log("augmentedPosts: ", augmentedPosts);
+    res.status(200).json(augmentedPosts);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -44,9 +71,10 @@ router.get("/user/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const post = new Post({
-    userId: req.body.userId,
+    userId: new ObjectId(req.body.userId),
     createdAt: new Date().toISOString(),
-    text: req.body.text
+    text: req.body.text,
+    likes: 0
   });
   try {
     const newPost = await post.save();
