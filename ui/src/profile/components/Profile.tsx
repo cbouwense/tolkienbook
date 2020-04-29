@@ -40,7 +40,7 @@ export const ConnectedProfile = (props: ProfileProps) => {
       }
     }
     fetchPosts();
-  });
+  }, [props.user]);
 
   return ( 
     props.user !== undefined ? (

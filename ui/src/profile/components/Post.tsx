@@ -25,7 +25,8 @@ const useStyles = makeStyles(() => ({
     "margin-left": "15px"
   },
   postText: {
-    "margin-top": "15px"
+    "margin-top": "15px",
+    "font-size": "2rem"
   }
 }));
 

@@ -27,14 +27,14 @@ export const Posts = (props: PostsProps) => {
     <div className={classes.posts}>
       <Grid direction="column" container spacing={2}>
         {props.posts.map(post => (
-          <Grid item xs={12}>
-            <Post
-              avatarSrc={post.image}
-              date={post.createdAt.toString()}
-              name={post.name}
-              text={post.text}
-            />
-          </Grid>
+            <Grid key={post.createdAt.toString()} item xs={12}>
+              <Post
+                avatarSrc={post.image}
+                date={post.createdAt.toString()}
+                name={post.name}
+                text={post.text}
+              />
+            </Grid>
         ))} 
       </Grid>
     </div>

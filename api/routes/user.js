@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const express = require("express");
 
 const User = require("../models/user");
@@ -31,7 +32,7 @@ router.post("/", async (req, res) => {
     race: req.body.race,
     birthyear: req.body.birthyear,
     image: req.body.image,
-    password: req.body.password
+    password: crypto.createHash("sha256").update(req.body.password).digest("hex")
   });
   try {
     const newUser = await user.save();
