@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
   userId: {
-    type: String,
+    type: mongoose.Types.ObjectId,
     required: true
   },
   createdAt: {
@@ -11,6 +11,10 @@ const postSchema = new mongoose.Schema({
   },
   text: {
     type: String,
+    required: true
+  },
+  likes: {
+    type: Number,
     required: true
   }
 })

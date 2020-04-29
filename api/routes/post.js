@@ -1,8 +1,10 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
 const Post = require("../models/post");
 
 const router = express.Router();
+const ObjectId = mongoose.Types.ObjectId;
 
 const getPostById = async (req, res, next) => {
   let post;
@@ -24,6 +26,22 @@ router.get("/:id", getPostById, async (req, res) => {
   res.send(res.post);
 });
 
+router.get("/user/:id", async (req, res) => {
+  let posts;
+  try {
+    posts = await Post.find({ userId: new ObjectId(req.params.id) })
+    console.log("posts: ", posts);
+    if (posts == null) {
+      return res.status(404).json({ 
+        message: `Cannot find posts by user ${req.params.id}`
+      });
+    }
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.post("/", async (req, res) => {
   const post = new Post({
     userId: req.body.userId,
@@ -35,6 +53,44 @@ router.post("/", async (req, res) => {
     res.status(201).json(newPost);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+router.post("/like/:id", async (req, res) => {
+  try {
+    const post = await Post.findOneAndUpdate(
+      { _id: new ObjectId(req.params.id) },
+      { $inc: { likes: 1 } },
+      { 
+        new: true,
+        useFindAndModify: false 
+      }
+    );
+    if (post == null) {
+      res.status(404).json({ message: `Post ${req.params.id} could not be found` });
+    }
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.post("/dislike/:id", async (req, res) => {
+  try {
+    const post = await Post.findOneAndUpdate(
+      { _id: new ObjectId(req.params.id) },
+      { $inc: { likes: -1 } },
+      { 
+        new: true,
+        useFindAndModify: false 
+      }
+    );
+    if (post == null) {
+      res.status(404).json({ message: `Post ${req.params.id} could not be found` });
+    }
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
