@@ -35,33 +35,32 @@ export const Profile = (props: ProfileProps) => {
         const username = urlTokens[urlTokens.length-1];
         const fetchedUser = await axios.get(`http://localhost:3001/user?username=${username}`);
         setUser(fetchedUser.data);
+        return fetchedUser.data;
       } catch (err) {
         console.error("Error fetching user: ", err);
       }
     }
-    const fetchPosts = async () => {
-      if (user !== undefined) {
-        try {
-          const fetchedPosts = await axios.get(`http://localhost:3001/post/user/${user._id}`);
-          console.log("fetchedPosts: ", fetchedPosts)
-          setPosts(fetchedPosts.data);
-        } catch (err) {
-          console.error(`Error fetching posts for user ${user._id}: `, err);
-        }
+    const fetchPosts = async (fetchedUser: User) => {
+      try {
+        console.log("sending post GET")
+        const fetchedPosts = await axios.get(`http://localhost:3001/post/user/${fetchedUser._id}`);
+        console.log("fetchedPosts: ", fetchedPosts)
+        setPosts(fetchedPosts.data);
+      } catch (err) {
+        console.error(`Error fetching posts for user ${fetchedUser._id}: `, err);
       }
     }
     (async () => {
       if (user === undefined || props.url !== url) {
         console.log("fetching user")
-        await fetchUser();
-      }
-      if (posts === undefined || props.url !== url) {
-        console.log("fetching posts")
-        await fetchPosts();
+        fetchUser().then(async (fetchedUser) => {
+          console.log("fetching posts")
+          fetchPosts(fetchedUser);          
+        });
       }
     })();
     setUrl(props.url);
-  }, [user, props.url]);
+  }, [user, url, props.url]);
 
   return ( 
     <div className={classes.root}>
