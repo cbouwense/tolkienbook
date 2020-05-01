@@ -52,7 +52,6 @@ router.get("/user/:id", async (req, res) => {
         message: `Cannot find posts by user ${req.params.id}`
       });
     }
-    // for each post, lookup user info and augment
     const augmentedPosts = await Promise.all(posts.map(async (post) => {
       const user = await getUserById(post.userId);
       return {
@@ -62,7 +61,6 @@ router.get("/user/:id", async (req, res) => {
         text: post.text
       }
     }));
-    console.log("augmentedPosts: ", augmentedPosts);
     res.status(200).json(augmentedPosts);
   } catch (err) {
     res.status(500).json({ message: err.message });

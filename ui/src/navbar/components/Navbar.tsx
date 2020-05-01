@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from '@material-ui/core/AppBar';
@@ -8,13 +9,20 @@ import Grid from "@material-ui/core/Grid";
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import { AppState } from "../../store";
+import { User } from "../../user/model";
+
 const useStyles = makeStyles(() => ({
   link: {
     "color": "white"
   }
 }))
 
-export const Navbar = () => {
+export interface NavbarProps {
+  user?: User;
+}
+
+const ConnectedNavbar = (props: NavbarProps) => {
   const classes = useStyles();
 
   return ( 
@@ -22,7 +30,7 @@ export const Navbar = () => {
       <Toolbar>
         <Grid container>
           <Grid item xs={12} sm={6} md={2}>
-            <Link className={classes.link} to="/">
+            <Link className={classes.link} to={`/user/${props.user?.username}`}>
               <Button color="inherit">
                 <Typography variant="h6">
                   Profile
@@ -54,3 +62,9 @@ export const Navbar = () => {
     </AppBar>
   );
 }
+
+const mapStateToProps = (state: AppState) => ({
+  user: state.user.user
+});
+
+export const Navbar = connect(mapStateToProps)(ConnectedNavbar);

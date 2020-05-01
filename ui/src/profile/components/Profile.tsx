@@ -2,11 +2,10 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { AppState } from "../../store";
+import { Post } from ".././model";
 import { Posts } from "./Posts";
 import { ProfileCard } from "./ProfileCard";
 import { User } from "../../user/model";
@@ -19,46 +18,64 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface ProfileProps {
-  user?: User;
-}
+  url: string;
+} 
 
 // TODO: Fix the right margin for the posts
-export const ConnectedProfile = (props: ProfileProps) => {
+export const Profile = (props: ProfileProps) => {
   const classes = useStyles();
-
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[] | undefined>(undefined);
+  const [user, setUser] = useState<User | undefined>(undefined);
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const urlTokens = props.url.split("/");
+        const username = urlTokens[urlTokens.length-1];
+        const fetchedUser = await axios.get(`http://localhost:3001/user?username=${username}`);
+        setUser(fetchedUser.data);
+      } catch (err) {
+        console.error("Error fetching user: ", err);
+      }
+    }
     const fetchPosts = async () => {
-      if (props.user) {
+      if (user !== undefined) {
         try {
-          const posts = await axios.get(`http://localhost:3001/post/user/${props.user._id}`);
-          setPosts(posts.data);
+          const fetchedPosts = await axios.get(`http://localhost:3001/post/user/${user._id}`);
+          console.log("fetchedPosts: ", fetchedPosts)
+          setPosts(fetchedPosts.data);
         } catch (err) {
-          console.error(`Error fetching posts for user ${props.user._id}: `, err);
+          console.error(`Error fetching posts for user ${user._id}: `, err);
         }
       }
     }
-    fetchPosts();
-  }, [props.user]);
+    (async () => {
+      if (user === undefined || props.url !== url) {
+        console.log("fetching user")
+        await fetchUser();
+      }
+      if (posts === undefined || props.url !== url) {
+        console.log("fetching posts")
+        await fetchPosts();
+      }
+    })();
+    setUrl(props.url);
+  }, [user, props.url]);
 
   return ( 
-    props.user !== undefined ? (
-      <div className={classes.root}>
+    <div className={classes.root}>
+      {!!user ? (  
         <ProfileCard 
-          name={props.user.name}
-          race={props.user.race}
-          image={props.user.image}
-          birthyear={props.user.birthyear}
+          name={user.name}
+          race={user.race}
+          image={user.image}
+          birthyear={user.birthyear}
         />
+      ) : null}
+      {!!posts ? (
         <Posts posts={posts}/>
-      </div>
-    ) : null
+      ) : null}
+    </div>
   );
 }
-
-const mapStateToProps = (state: AppState) => ({
-  user: state.user.user
-});
-
-export const Profile = connect(mapStateToProps)(ConnectedProfile);

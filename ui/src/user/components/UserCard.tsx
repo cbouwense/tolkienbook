@@ -30,13 +30,14 @@ const useStyles = makeStyles(() => ({
 export interface UserCardProps {
   avatarSrc: string;
   name: string;
+  username: string;
 }
 
 export const UserCard = (props: UserCardProps) => {
   const classes = useStyles();
   
   return (
-    <Link to={`user/${props.name}`} className={classes.link}>
+    <Link to={`user/${props.username}`} className={classes.link}>
       <Card className={classes.card}>
         <div className={classes.header}>
           <Avatar className={classes.avatar} src={props.avatarSrc} />

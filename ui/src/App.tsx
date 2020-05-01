@@ -32,10 +32,10 @@ export const ConnectedApp = (props: AppProps) => {
       <Navbar />
       <div className={classes.root}>
         <Switch>
+          <Route path="/user/" component={(props: any) => <Profile {...props} url={window.location.href} />} />
           {!!props.user
             ? (
               <>
-                <Route path="/" exact component={Profile} />
                 <Route path="/allies" exact component={Allies} />
                 <Route path="/enemies" exact component={Enemies} />
               </>

@@ -59,10 +59,11 @@ const ConnectedEnemies = (props: EnemiesProps) => {
       <Grid container spacing={3}>
         {enemies.map((enemy: User) => {
           return (
-            <Grid item xs={12} sm={6} md={4} key={enemy.name}>
+            <Grid item xs={12} sm={6} md={4} key={enemy._id}>
               <UserCard 
                 avatarSrc={enemy.image}
                 name={enemy.name}
+                username={enemy.username}
               />
             </Grid>
           );

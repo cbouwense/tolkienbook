@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Link } from "react-router-dom";
 import React from "react";
 import { bindActionCreators, Dispatch } from "redux";
 import { connect } from "react-redux";
@@ -83,13 +84,15 @@ const ConnectedLoginModal = (props: LoginModalProps) => {
             value={values.password} 
             onChange={handleChange("password")}
           />
-          <Button 
-            variant="contained" 
-            color="primary"
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
+          <Link to={`/user/${values.username}`}>
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </Link>
         </div>
       </form>
     </div>

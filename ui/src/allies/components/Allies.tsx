@@ -60,10 +60,11 @@ const ConnectedAllies = (props: AlliesProps) => {
       <Grid container spacing={3}>
         {allies.map((ally: User) => {
           return (
-            <Grid item xs={12} sm={6} md={4} key={ally.name}>
+            <Grid item xs={12} sm={6} md={4} key={ally._id}>
               <UserCard 
                 avatarSrc={ally.image}
                 name={ally.name}
+                username={ally.username}
               />
             </Grid>
           );

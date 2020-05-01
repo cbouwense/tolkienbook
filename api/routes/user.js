@@ -21,6 +21,19 @@ const getUserById = async (req, res, next) => {
   next();
 }
 
+router.get("/", async (req, res) => {
+  let user;
+  try {
+    user = await User.findOne({ username: req.query.username });
+    if (user == null) {
+      return res.status(404).json({ message: `Cannot find user ${req.query.username}`});
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+  res.send(user);
+});
+
 router.get("/:id", getUserById, async (req, res) => {
   res.send(res.user);
 });
